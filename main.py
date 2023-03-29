@@ -1,9 +1,9 @@
 from flask import Flask, url_for, render_template, redirect, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import IntegrityError
-
+from werkzeug.security import generate_password_hash, check_password_hash
 from forms import AddCafeForm, ContactUsForm, LoginForm, RegisterForm
-from flask_login import UserMixin, LoginManager
+from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
@@ -66,6 +66,7 @@ def get_all_cafes():
 
 
 @app.route("/add", methods=["GET", "POST"])
+@login_required
 def add_cafe():
     form = AddCafeForm()
     if form.validate_on_submit():
@@ -93,6 +94,7 @@ def add_cafe():
 
 
 @app.route("/delete-cafe/<int:cafe_id>")
+@login_required
 def delete_cafe(cafe_id):
     print(cafe_id)
     cafe = db.session.get(Cafe, cafe_id)
@@ -104,6 +106,7 @@ def delete_cafe(cafe_id):
 
 
 @app.route("/edit-cafe/<int:cafe_id>", methods=["GET", "POST"])
+@login_required
 def edit_cafe(cafe_id):
     cafe = db.session.get(Cafe, cafe_id)
     if not cafe:
@@ -159,14 +162,39 @@ def contact():
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        pass
+        password_hash = generate_password_hash(form.password.data)
+        new_user = User(email=form.email.data, password=password_hash)
+        db.session.add(new_user)
+        try:
+            db.session.commit()
+        except IntegrityError:
+            flash("You already have an account!", "error")
+            return redirect(request.url)
+        flash("Your account was successfully created", "success")
+        return redirect(url_for("login"))
     return render_template("register.html", form=form)
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
+    if form.validate_on_submit():
+        user = db.session.execute(db.select(User).filter_by(email=form.email.data)).scalar_one_or_none()
+        if user and check_password_hash(user.password, form.password.data):
+            login_user(user)
+            flash("Logged in successfully.", "success")
+            return redirect(url_for("home"))
+        else:
+            flash("Wrong credentials!", "error")
     return render_template("login.html", form=form)
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    flash("You've been logged out", "success")
+    return redirect(url_for("home"))
 
 
 if __name__ == '__main__':
