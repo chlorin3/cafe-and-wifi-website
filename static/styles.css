@@ -1,0 +1,375 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+}
+
+#background-photo {
+    background: linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0.6), rgba(0,0,0,0.1)),
+    url("https://images.unsplash.com/photo-1521017432531-fbd92d768814?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 40%;
+    background-attachment:fixed;
+    min-height: 100vh;
+    overflow:auto; /* To expand on inner div's margin */
+}
+
+/* ------ NAVBAR ------ */
+.navbar-custom {
+    padding: 1rem 2rem 1rem 1.3rem;
+}
+
+.navbar-custom .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+/* change the link color */
+.navbar-custom .navbar-nav .nav-link {
+    color: #fff;
+    padding: 1rem;
+    text-align: right;
+}
+
+/* ------ INDEX - TITLE ------ */
+#title {
+    color: #fff;
+    padding: 10% 15%;
+}
+
+#title h1 {
+    font-size: 4.5rem;
+}
+
+#title p {
+    font-size: 1.3rem;
+}
+
+@media (max-width: 430px) {
+    #title h1 {
+    font-size: 3rem;
+    padding-top: 10%;
+}
+
+    #title p {
+        font-size: 1rem;
+        padding: 10% 0%;
+    }
+
+    #background-photo {
+        /*padding-bottom: 50vh;
+        or padding-bottom: 100%;*/
+    }
+}
+
+@media (min-width: 431px) and (max-width: 700px) {
+    #title h1 {
+    font-size: 3.5rem;
+}
+
+    #title p {
+        font-size: 1.2rem;
+    }
+}
+
+
+/* ------ INDEX - FEATURES ------ */
+#features {
+    padding: 0% 15%;
+    /*background-color: #EED6C4;*/
+    background-color: #FFF3E4;
+}
+
+.feature-box {
+    padding: 4%;
+}
+
+#features h3 {
+    font-size: 1.5rem;
+    font-weight: 900;
+}
+
+#features svg {
+    color: #483434;
+    margin-bottom: 1rem;
+}
+
+#features svg:hover {
+    color: #8D7B68;
+}
+
+#features p {
+    color: #6B4F4F;
+}
+
+/* ------ INDEX - REVIEWS ------ */
+#reviews {
+    padding: 3% 15% 0% 15%;
+}
+#reviews h3 {
+    font-size: 2.5rem;
+    font-weight: 800;
+}
+
+#reviews img {
+    border-radius: 100%;
+    width: 100px;
+    margin-bottom: 2%;
+}
+
+.review-box {
+    padding: 4%;
+}
+
+.review-box small {
+    font-size: 0.8rem;
+}
+
+.review-box p {
+    font-style: italic;
+    padding-top: 3%;
+    letter-spacing: 0.025rem;
+}
+
+/* ------ INDEX - EXPLORE ------ */
+#explore {
+    padding: 3% 15%;
+    background-color: #6B4F4F;
+    color: #fff;
+}
+
+#explore h3 {
+    font-size: 2.5rem;
+    font-weight: 800;
+}
+
+.custom-button {
+    margin: 3%;
+    /*padding: 1.5% 3%;*/
+    font-size: 1.5rem;
+}
+
+.custom-link {
+    display: block;
+    color: #fff;
+}
+
+#explore a:hover {
+    color: #EED6C4;
+}
+
+@media (max-width: 430px) {
+    #explore {
+        padding-top: 10%;
+        padding-bottom: 10%;
+    }
+
+    #explore h3 {
+        font-size: 2rem;
+    }
+
+    #explore a {
+        padding-top: 3%;
+    }
+    #reviews h3 {
+        font-size: 2rem;
+    }
+}
+
+/* ------ INDEX - FOOTER ------ */
+#index-footer {
+    min-height: 80px;
+    background-color: #fff;
+}
+
+/* ------ CAFES - LIST OF ALL CAFES ------ */
+#cafes-introduction {
+    color: #fff;
+    padding: 3% 15%;
+}
+
+#cafes-introduction p {
+    padding-top: 1.5%;
+}
+
+.shadow-bg {
+    padding: 1% 2%;
+    text-align: left;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+#all-cafes {
+    margin: 0% 15% 5% 15%;
+    max-height: 60vh;
+    overflow: auto;
+}
+
+#all-cafes a {
+    color: #EED6C4;
+}
+
+#all-cafes a:hover {
+    color: #6B4F4F;
+}
+
+#all-cafes tbody tr:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 430px) {
+    #all-cafes table {
+    font-size: 0.8rem;
+    }
+}
+
+/* ------ ADD CAFE ------ */
+#add-cafe {
+    margin: 0% 15% 5% 15%;
+}
+
+.form-header {
+    color: #fff;
+    text-align: center;
+    padding: 2% 0%;
+}
+
+.add-form {
+    font-size: 1.2rem;
+    color: white;
+    padding: 0% 5%;
+}
+
+.add-form hr {
+    margin: 2% 0%;
+}
+
+.add-form label {
+    vertical-align: middle;
+}
+
+.full-width input, select, textarea {
+    width: 100%;
+}
+
+input[type=checkbox] {
+    transform: scale(1.5);
+    margin-left: 10%;
+}
+
+/*------ CONTACT US ------*/
+#contact-photo {
+    background: linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0.6), rgba(0,0,0,0.1)),
+    url("https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-attachment:fixed;
+    min-height: 100vh;
+    overflow: auto;
+    padding-bottom: 5%;
+}
+
+#contact-form {
+    margin: 0% 25% 3% 25%;
+    font-size: 1.2rem;
+    text-align: left;
+    padding: 1% 2%;
+    background: rgba(255, 243, 228, 0.8);
+}
+
+#contact-form hr {
+    margin: 2% 0%;
+}
+
+
+@media (max-width: 430px) {
+    #contact-form {
+    margin: 3% 15%;
+}
+}
+
+/* ------ Register/Log in ------ */
+#register-photo {
+    background: linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0.5), rgba(0,0,0,0.2), rgba(0,0,0,0.1)),
+    url("https://images.unsplash.com/photo-1527347757911-56639bbfa470?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 30%;
+    /*background-attachment:fixed;*/
+    min-height: 100vh;
+    overflow: auto;
+}
+
+#login-form {
+    margin: 3% 25% 1% 25%;
+    padding: 3% 10% 1.5% 10%;
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+#login-form label, #register-form label {
+    padding: 5% 0% 5% 0%;
+}
+
+#create-account {
+    font-size: 1rem;
+    text-align: center;
+}
+
+#create-account a {
+    color: #EED6C4;
+}
+
+#create-account a:hover {
+    color: #6B4F4F;
+}
+
+#register-photo footer, #background-photo footer {
+    color: #fff;
+}
+
+#register-form {
+    margin: 3% 25% 1% 25%;
+    padding: 3% 5% 1.5% 5%;
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+@media (max-width: 700px) {
+    #login-form, #register-form, #all-cafes, #add-cafe, #contact-form{
+    margin: 3% 5%;
+}
+    #add-cafe, #all-cafes, #contact-form {
+       margin-bottom: 15%;
+    }
+}
+
+/* Flashes */
+.flashes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.flashes li {
+  border-radius: 4px;
+  color: #fff;
+  margin: 10px 0;
+  padding: 15px;
+}
+
+/* Success flash */
+.flashes .flash-success {
+  background-color: #28a745;
+}
+
+/* Error flash */
+.flashes .flash-error {
+  background-color: #dc3545;
+}
+
+/* Warning flash */
+.flashes .flash-warning {
+  color: #000;
+  background-color: #ffc107;
+}

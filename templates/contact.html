@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block title %} Contact Us {% endblock %}
+
+{% block content %}
+<div id="contact-photo">
+    {% include "header.html" %}
+    <section id="cafes-introduction">
+        <h1>Get In Touch</h1>
+        <p>
+            We're here to help! Whether you have a question about our services,
+            need more information about our company, or just want to say hello,
+            we would love to hear from you. Our team is always ready to assist you
+            in any way we can. So don't hesitate - drop us a line, and let's start
+            a conversation!
+        </p>
+    </section>
+
+<section id="contact-form">
+    <h3 class="form-header text-dark">Contact Form</h3>
+<form method="POST" action="{{ url_for('contact') }}" novalidate>
+    {{ form.csrf_token }}
+<div class="row">
+    <div class="col-lg-3">{{ form.name.label }}</div>
+    <div class="col-lg-9 full-width">{{ form.name }}
+        <small class="form-text text-danger">
+            {{ ", ".join(form.name.errors) }}
+        </small>
+    </div>
+    <hr>
+    <div class="col-lg-3">{{ form.email.label }}</div>
+    <div class="col-lg-9 full-width">
+        {{ form.email }}
+        <small class="form-text text-danger">
+            {{ ", ".join(form.email.errors) }}
+        </small>
+    </div>
+    <hr>
+    <div class="col-lg-3">{{ form.phone_number.label }}</div>
+    <div class="col-lg-9 full-width">
+        {{ form.phone_number(placeholder="+xx xxxxxxxxxx") }}
+        <small class="form-text text-danger">
+            {{ ", ".join(form.phone_number.errors) }}
+        </small>
+    </div>
+    <hr>
+    <div class="col-lg-3">{{ form.message.label }}</div>
+    <div class="col-lg-9 full-width">
+        {{ form.message }}
+        <small class="form-text text-danger">
+            {{ ", ".join(form.message.errors) }}
+        </small>
+    </div>
+    <div class="col-12 text-center">{{ form.submit(class_="btn btn-outline-dark btn-lg px-5 my-3") }}</div>
+</div>
+</form>
+</section>
+    {% include "footer.html" %}
+</div>
+{% endblock %}

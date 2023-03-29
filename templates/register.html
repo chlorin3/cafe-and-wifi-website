@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block title %}Log in{% endblock %}
+
+{% block content %}
+<div id="register-photo" class="">
+    {% include "header.html" %}
+    <section id="cafes-introduction">
+        <h1>Sign Up</h1>
+        <p></p>
+    </section>
+
+    <section id="register-form" class="shadow-bg">
+        <form method="POST" action="{{ url_for('register') }}" novalidate>
+            {{ form.csrf_token }}
+            <div class="row">
+                <div class="col-lg-4">{{ form.email.label }}</div>
+                <div class="col-lg-8 full-width">
+                    {{ form.email }}
+                    <small class="form-text text-danger">
+                    {{ ", ".join(form.email.errors) }}
+                    </small>
+                </div>
+                <div class="col-lg-4">{{ form.password.label }}</div>
+                <div class="col-lg-8 full-width">
+                    {{ form.password }}
+                    <small class="form-text text-danger">
+                    {{ ", ".join(form.password.errors) }}
+                    </small>
+                </div>
+                <div class="col-lg-4">{{ form.password_confirm.label }}</div>
+                <div class="col-lg-8 full-width">
+                    {{ form.password_confirm }}
+                    <small class="form-text text-danger">
+                    {{ ", ".join(form.password_confirm.errors) }}
+                    </small>
+                </div>
+                <div class="col-12 text-center">{{ form.submit(class_="btn btn-outline-light btn-lg px-3 px-sm-5 mt-3 mb-4") }}</div>
+            </div>
+        </form>
+        <div id="create-account">
+        Already have an account?<br>
+        <a href="{{ url_for('login') }}">Log In!</a>
+        </div>
+    </section>
+
+    {% include "footer.html" %}
+</div>
+{% endblock %}

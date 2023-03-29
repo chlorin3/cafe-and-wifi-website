@@ -1,0 +1,33 @@
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+    <a class="navbar-brand" href="#">
+        <i class="fas fa-coffee"></i>
+        Cafe & Wifi
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link " href="{{ url_for('home') }}">Home</a>
+            <a class="nav-link" href="{{ url_for('get_all_cafes') }}">Find Cafes</a>
+            <a class="nav-link" href="{{ url_for('add_cafe') }}">Add a Cafe</a>
+            <a class="nav-link" href="{{ url_for('contact') }}">Contact Us</a>
+            <a class="nav-link" href="{{ url_for('login') }}">Sign In/Sign Up</a>
+            <a class="nav-link" href="#">Log Out</a>
+        </div>
+    </div>
+</nav>
+<div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class="flashes">
+      {% for category, message in messages %}
+        <li class="flash-{{ category }}">
+          {{ message }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+</div>

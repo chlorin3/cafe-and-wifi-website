@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<div id="background-photo" class="">
+    {% include "header.html" %}
+    <section id="cafes-introduction">
+    <h1>Find Your Perfect Cafe Today</h1>
+    <p>
+        Here's a comprehensive table of cafes, including key details such as
+        location, sockets 🔌, toilets 🚽, Wi-Fi 📶, ability to take calls 📞, number of seats,
+        and coffee prices. Use our table to easily find the ideal workspace for your needs.
+    </p>
+    </section>
+<section id="all-cafes" class="shadow-bg">
+    <table class="table text-light mb-3">
+        <thead>
+        <tr>
+            <th>Cafe Name</th>
+            <th>Location</th>
+            <th>🔌</th>
+            <th>🚽</th>
+            <th>📶</th>
+            <th>📞</th>
+            <th class="text-end">Seats</th>
+            <th class="text-end">Coffee Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for cafe in cafes %}
+        <tr>
+            <td>{{ cafe.name }}
+                <a href="{{ url_for('edit_cafe', cafe_id=cafe.id) }}">✏️</a>
+                <a href="{{ url_for('delete_cafe', cafe_id=cafe.id) }}">🗑️</a>
+            </td>
+            <td><a href="{{ cafe.map_url }}">{{ cafe.location }}</a></td>
+            <td>{% if cafe.has_sockets %}✅{% else %}❌{% endif %}</td>
+            <td>{% if cafe.has_toilet %}✅{% else %}❌{% endif %}</td>
+            <td>{% if cafe.has_wifi %}✅{% else %}❌{% endif %}</td>
+            <td>{% if cafe.can_take_calls %}✅{% else %}❌{% endif %}</td>
+            <td class="text-end">{{ cafe.seats }}</td>
+            <td class="text-end">{{ cafe.coffee_price }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</section>
+    {% include 'footer.html' %}
+</div>
+   {% endblock %}

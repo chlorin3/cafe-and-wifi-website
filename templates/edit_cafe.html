@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+
+{% block title %}Edit a cafe{% endblock %}
+
+{% block content %}
+<div id="background-photo" class="">
+{% include "header.html" %}
+    <section id="cafes-introduction">
+        <h1>Edit a Cafe</h1>
+        <p>
+        </p>
+    </section>
+    <section id="add-cafe" class="shadow-bg">
+    <h3 class="form-header">Edit Cafe Form</h3>
+    <form method="post" action="{{ url_for('edit_cafe', cafe_id=cafe_id) }}" novalidate>
+    {{ form.csrf_token }}
+        <div class="row add-form">
+            <div class="col-lg-3">{{ form.name.label }}</div>
+            <div class="col-lg-9 full-width">{{ form.name }}
+            {{ form.phone_number }}
+            <small class="form-text text-danger">
+                {{ ", ".join(form.name.errors) }}
+            </small>
+            </div>
+            <hr>
+            <div class="col-lg-3">{{ form.img_url.label }}</div>
+            <div class="col-lg-9 full-width">{{ form.img_url }}
+            {{ form.phone_number }}
+            <small class="form-text text-danger">
+                {{ ", ".join(form.img_url.errors) }}
+            </small>
+            </div>
+            <hr>
+            <div class="col-lg-3">{{ form.location.label }}</div>
+            <div class="col-lg-9 full-width">{{ form.location }}
+            {{ form.phone_number }}
+            <small class="form-text text-danger">
+                {{ ", ".join(form.location.errors) }}
+            </small>
+            </div>
+            <hr>
+            <div class="col-lg-3">{{ form.map_url.label }}</div>
+            <div class="col-lg-9 full-width">{{ form.map_url }}
+            {{ form.phone_number }}
+            <small class="form-text text-danger">
+                {{ ", ".join(form.map_url.errors) }}
+            </small>
+            </div>
+            <hr>
+            <div class="col-lg-3">{{ form.coffee_price.label }}</div>
+            <div class="col-lg-2 full-width">{{ form.coffee_price }}
+            {{ form.phone_number }}
+            <small class="form-text text-danger">
+                {{ ", ".join(form.coffee_price.errors) }}
+            </small>
+            </div>
+            <hr>
+        </div>
+        <div class="row add-form">
+            <div class="col-lg-3">{{ form.seats.label }}</div>
+            <div class="col-lg-2 full-width">{{ form.seats }}</div>
+            <hr>
+        </div>
+        <div class="row add-form form-checkbox">
+            <div class="col-lg-3">{{ form.has_toilet.label }}{{ form.has_toilet }}</div>
+            <div class="col-lg-3">{{ form.has_wifi.label }} {{ form.has_wifi }}</div>
+            <div class="col-lg-3">{{ form.has_sockets.label }} {{ form.has_sockets }}</div>
+            <div class="col-lg-3">{{ form.can_take_calls.label }} {{ form.can_take_calls }}</div>
+            <hr>
+            <div class="col-lg-12 text-center my-3">{{ form.submit(class_="btn btn-outline-light btn-lg") }}</div>
+        </div>
+    </form>
+    </section>
+{% include "footer.html" %}
+</div>
+{% endblock %}
