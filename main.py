@@ -43,9 +43,13 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(250), unique=True, nullable=False)
     password = db.Column(db.String(250))
+    role = db.Column(db.String(250))
 
 # with app.app_context():
-#     db.create_all()
+#     # db.create_all()
+#     user = db.session.get(User, 1)
+#     user.role = "admin"
+#     db.commit()
 # exit()
 
 
@@ -171,7 +175,8 @@ def register():
             flash("You already have an account!", "error")
             return redirect(request.url)
         flash("Your account was successfully created", "success")
-        return redirect(url_for("login"))
+        login_user(new_user)
+        return redirect(url_for("home"))
     return render_template("register.html", form=form)
 
 
