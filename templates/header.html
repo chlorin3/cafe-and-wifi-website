@@ -4,7 +4,7 @@
         Cafe & Wifi
     </a>
     {% if current_user.is_authenticated %}
-    <small class="text-light">Hi {{ current_user.email.split("@")[0] }}!</small>
+    <small class="text-light">Hi {{ current_user.email.split("@")[0] }} {{ current_user.role }}!</small>
     {% endif %}
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">

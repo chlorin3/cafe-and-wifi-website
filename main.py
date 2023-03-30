@@ -1,15 +1,21 @@
-from flask import Flask, url_for, render_template, redirect, request, flash
+from functools import wraps
+from flask import Flask, url_for, render_template, redirect, request, flash, current_app, session, abort
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
 from forms import AddCafeForm, ContactUsForm, LoginForm, RegisterForm
-from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user
+from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user, current_user
+from flask_principal import Principal, Permission, RoleNeed, identity_changed, Identity, AnonymousIdentity, UserNeed, \
+    identity_loaded
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+# load the principal extension
+Principal(app)
 
 # Connect to Database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cafes.db'
@@ -31,22 +37,45 @@ class Cafe(db.Model):
     can_take_calls = db.Column(db.Boolean, nullable=False)
     coffee_price = db.Column(db.String(250), nullable=True)
 
-    def to_dict(self):
-        # Loop through each column in the data record and create a new dictionary entry;
-        # where the key is the name of the column and the value is the value of the column
-        dictionary = {column.name: getattr(self, column.name) for column in self.__table__.columns}
-        return dictionary
-
 
 class User(UserMixin, db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(250), unique=True, nullable=False)
     password = db.Column(db.String(250))
+    role = db.Column(db.String(250))
 
 # with app.app_context():
 #     db.create_all()
 # exit()
+
+
+@identity_loaded.connect_via(app)
+def on_identity_loaded(sender, identity):
+    # Set the identity user object
+    identity.user = current_user
+
+    # Add the UserNeed to the identity
+    if hasattr(current_user, 'id'):
+        identity.provides.add(UserNeed(current_user.id))
+
+    # Assuming the User model has a list of roles, update the
+    # identity with the roles that the user provides
+    if hasattr(current_user, 'role'):
+        identity.provides.add(RoleNeed(current_user.role))
+
+
+# Create a permission with a single Need, in this case a RoleNeed.
+admin_permission = Permission(RoleNeed("admin"))
+
+
+def admin_required(function):
+    @wraps(function)
+    def wrapper(*args, **kwargs):
+        if not admin_permission.require().can():
+            abort(403)
+        return function(*args, **kwargs)
+    return wrapper
 
 
 @login_manager.user_loader
@@ -94,9 +123,8 @@ def add_cafe():
 
 
 @app.route("/delete-cafe/<int:cafe_id>")
-@login_required
+@admin_required
 def delete_cafe(cafe_id):
-    print(cafe_id)
     cafe = db.session.get(Cafe, cafe_id)
     if cafe:
         db.session.delete(cafe)
@@ -106,7 +134,7 @@ def delete_cafe(cafe_id):
 
 
 @app.route("/edit-cafe/<int:cafe_id>", methods=["GET", "POST"])
-@login_required
+@admin_required
 def edit_cafe(cafe_id):
     cafe = db.session.get(Cafe, cafe_id)
     if not cafe:
@@ -182,6 +210,9 @@ def login():
         user = db.session.execute(db.select(User).filter_by(email=form.email.data)).scalar_one_or_none()
         if user and check_password_hash(user.password, form.password.data):
             login_user(user)
+
+            identity_changed.send(current_app._get_current_object(), identity=Identity(user.id))
+
             flash("Logged in successfully.", "success")
             return redirect(url_for("home"))
         else:
@@ -193,6 +224,14 @@ def login():
 @login_required
 def logout():
     logout_user()
+
+    # Remove session keys set by Flask-Principal
+    for key in ('identity.name', 'identity.auth_type'):
+        session.pop(key, None)
+
+    # Tell Flask-Principal the user is anonymous
+    identity_changed.send(current_app._get_current_object(), identity=AnonymousIdentity())
+
     flash("You've been logged out", "success")
     return redirect(url_for("home"))
 
