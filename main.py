@@ -1,6 +1,7 @@
 from functools import wraps
 from flask import Flask, url_for, render_template, redirect, request, flash, current_app, session, abort
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
 from forms import AddCafeForm, ContactUsForm, LoginForm, RegisterForm
@@ -45,11 +46,19 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(250))
     role = db.Column(db.String(250))
 
+
+class Message(db.Model):
+    __tablename__ = "messages"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(250), nullable=False)
+    email = db.Column(db.String(250), nullable=False)
+    phone_number = db.Column(db.String(250))
+    message = db.Column(db.String(500), nullable=False)
+    date = db.Column(db.DateTime, nullable=False, server_default=func.now())
+
+
 # with app.app_context():
-#     # db.create_all()
-#     user = db.session.get(User, 1)
-#     user.role = "admin"
-#     db.commit()
+#     db.create_all()
 # exit()
 
 
@@ -185,8 +194,30 @@ def edit_cafe(cafe_id):
 def contact():
     form = ContactUsForm()
     if form.validate_on_submit():
-        pass
+        new_message = Message(name=form.name.data, email=form.email.data, phone_number=form.phone_number.data, message=form.message.data)
+        db.session.add(new_message)
+        db.session.commit()
+        flash("Success!", "success")
+        return render_template("contact.html", is_sent=True)
     return render_template("contact.html", form=form)
+
+
+@app.route("/messages")
+@admin_required
+def show_messages():
+    all_messages = db.session.execute(db.select(Message).order_by(Message.date.desc())).scalars().all()
+    return render_template("messages.html", messages=all_messages)
+
+
+@app.route("/delete-message/<int:message_id>")
+@admin_required
+def delete_message(message_id):
+    message = db.session.get(Message, message_id)
+    if message:
+        db.session.delete(message)
+        db.session.commit()
+        flash("Message deleted!", "success")
+    return redirect(url_for("show_messages"))
 
 
 @app.route("/register", methods=["GET", "POST"])

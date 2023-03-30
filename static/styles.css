@@ -206,6 +206,7 @@ body {
 
 #all-cafes a {
     color: #EED6C4;
+    text-decoration: none;
 }
 
 #all-cafes a:hover {
@@ -344,7 +345,12 @@ input[type=checkbox] {
     }
 }
 
-/* Flashes */
+.message-person {
+    max-width:150px;
+    overflow-wrap: break-word;
+}
+
+/* ------ Flashes ------ */
 .flashes {
   list-style: none;
   margin: 0;

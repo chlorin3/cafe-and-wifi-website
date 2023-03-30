@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}Users' Messages{% endblock %}
+
+{% block content %}
+<div id="contact-photo">
+    {% include "header.html" %}
+    <section id="cafes-introduction">
+        <h1>List of messages</h1>
+    </section>
+<section id="all-cafes" class="shadow-bg text-light">
+<table class="table table-bordered text-light mb-3">
+    <thead>
+    <tr>
+        <th>From</th>
+        <th>Date</th>
+        <th>Message</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for message in messages %}
+    <tr>
+        <td><p class="message-person">
+            {{ message.name }}<br>
+            {{ message.email }}<br>
+            {{ message.phone_number }}</p>
+        </td>
+        <td>{{ message.date.strftime('%d-%m-%Y %H:%M:%S') }}</td>
+        <td>{{ message.message }}</td>
+        <td class="text-center">
+            <a href="{{ url_for('delete_message', message_id=message.id) }}">❌</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</section>
+</div>
+
+{% endblock %}
