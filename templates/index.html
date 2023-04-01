@@ -7,8 +7,6 @@
 <div id="background-photo">
     {% include "header.html" %}
     <section id="title">
-        <!--<img class="m-auto" src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80">
-        <h1>Experience the ultimate work environment: efficient, focused, and unmatched.</h1>-->
         <h1>Coworking with a local twist</h1>
         <p>
             The ultimate resource for finding cafes that provide a perfect work environment.
@@ -79,7 +77,11 @@
 <section id="explore">
     <h3>TIME TO GET PRODUCTIVE!</h3>
     <a class="btn btn-outline-light btn-lg custom-button" href="{{ url_for('get_all_cafes') }}" role="button">Explore cafes</a>
+    {% if current_user.is_authenticated %}
     <a class="custom-link" href="{{ url_for('add_cafe') }}">Share your favourite laptop-friendly spot with the community!</a>
+    {% else %}
+    <a class="custom-link" href="{{ url_for('login') }}">Log in and share your favourite laptop-friendly spot with the community!</a>
+    {% endif %}
 </section>
 <section id="index-footer">
 {% include "footer.html" %}

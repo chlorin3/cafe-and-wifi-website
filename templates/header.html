@@ -1,11 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" href="{{ url_for('home') }}">
         <i class="fas fa-coffee"></i>
         Cafe & Wifi
     </a>
-    {% if current_user.is_authenticated %}
-    <small class="text-light">Hi {{ current_user.email.split("@")[0] }} {{ current_user.role }}!</small>
-    {% endif %}
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -22,6 +19,7 @@
             <a class="nav-link" href="{{ url_for('show_messages') }}">Messages</a>
             {% endif %}
             {% if current_user.is_authenticated %}
+            <div class="nav-link text-secondary">{{ current_user.email.split("@")[0] }}</div>
             <a class="nav-link" href="{{ url_for('logout') }}">Log Out</a>
             {% else %}
             <a class="nav-link" href="{{ url_for('login') }}">Sign In/Sign Up</a>

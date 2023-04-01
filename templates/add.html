@@ -1,21 +1,36 @@
 {% extends "layout.html" %}
 
-{% block title %}Add a cafe{% endblock %}
+{% block title %}
+{% if request.endpoint == "edit_cafe" %}
+Edit a cafe
+{% else %}
+Add a cafe
+{% endif %}
+{% endblock %}
 
 {% block content %}
-<div id="background-photo" class="">
+<div id="background-photo">
 {% include "header.html" %}
     <section id="cafes-introduction">
+        {% if request.endpoint == "edit_cafe" %}
+        <h1>Edit Your Favorite Workspace</h1>
+        {% else %}
         <h1>Share Your Favorite Workspace</h1>
         <p>Do you have a favorite cafe that you love to work from?
             Help us grow our community by sharing your favorite workspace with us!
             Fill out the form below to add your cafe to our list and help other
             professionals discover their perfect workspace.
         </p>
+        {% endif %}
     </section>
     <section id="add-cafe" class="shadow-bg">
+    {% if request.endpoint == "edit_cafe" %}
+    <h3 class="form-header">Edit Cafe Form</h3>
+    <form method="post" action="{{ url_for('edit_cafe', cafe_id=cafe_id) }}" novalidate>
+    {% else %}
     <h3 class="form-header">New Cafe Form</h3>
     <form method="post" action="{{ url_for('add_cafe') }}" novalidate>
+    {% endif %}
     {{ form.csrf_token }}
         <div class="row add-form">
             <div class="col-lg-3">{{ form.name.label }}</div>
