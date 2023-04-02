@@ -9,6 +9,7 @@ from wtforms import (
     TelField,
     EmailField,
     DecimalField,
+    HiddenField,
 )
 from wtforms.validators import DataRequired, URL, Email, EqualTo, Regexp, Length
 
@@ -71,3 +72,9 @@ class RegisterForm(FlaskForm):
     )
     password_confirm = PasswordField("Repeat Password", validators=[DataRequired()])
     submit = SubmitField("Sign me up!")
+
+
+class ChangeRoleForm(FlaskForm):
+    user_id = HiddenField()
+    role = SelectField("Role", choices=[("user", "User"), ("admin", "Admin")])
+    submit = SubmitField("✔️")
