@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block title %}Users{% endblock %}
+
+{% block content %}
+<div id="contact-photo">
+    {% include "header.html" %}
+    <section id="cafes-introduction">
+        <h1>List of users</h1>
+    </section>
+<section id="all-cafes" class="shadow-bg text-light">
+<table class="table table-bordered text-light mb-3">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for user, form in users %}
+    <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+            <form method="post" action="{{ url_for('change_user_role') }}" novalidate>
+            <div class="row">
+                <div class="col col-md-8">
+                {{ form.csrf_token }}
+                {{ form.user_id }}
+                {{ form.role }}
+                </div>
+                <div class="col col-md-4">
+                    {{ form.submit(class_='btn p-0') }}
+                </div>
+            </div>
+            </form>
+        </td>
+        <td class="text-center">
+            <a href="{{ url_for('delete_user', user_id=user.id) }}">❌</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</section>
+</div>
+
+{% endblock %}
