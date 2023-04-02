@@ -14,7 +14,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
-from forms import AddCafeForm, ContactUsForm, LoginForm, RegisterForm
+from forms import AddCafeForm, ContactUsForm, LoginForm, RegisterForm, ChangeRoleForm
 from flask_login import (
     UserMixin,
     LoginManager,
@@ -71,7 +71,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(250), unique=True, nullable=False)
     password = db.Column(db.String(250))
-    role = db.Column(db.String(250))
+    role = db.Column(db.String(250), default="user")
 
 
 class Message(db.Model):
@@ -127,7 +127,7 @@ def home():
     return render_template("index.html")
 
 
-@app.route("/all")
+@app.route("/cafes")
 def get_all_cafes():
     # Retrieve all the Cafe objects from the database
     all_cafes = db.session.execute(db.select(Cafe)).scalars().all()
@@ -173,7 +173,7 @@ def add_cafe():
         return render_template("add.html", form=form)
 
 
-@app.route("/delete-cafe/<int:cafe_id>")
+@app.route("/cafes/<int:cafe_id>/delete")
 @admin_required
 def delete_cafe(cafe_id):
     # Get the Cafe object from the database using its ID.
@@ -189,7 +189,7 @@ def delete_cafe(cafe_id):
     return redirect(url_for("get_all_cafes"))
 
 
-@app.route("/edit-cafe/<int:cafe_id>", methods=["GET", "POST"])
+@app.route("/cafes/<int:cafe_id>/edit", methods=["GET", "POST"])
 @admin_required
 def edit_cafe(cafe_id):
     # Get the Cafe object from the database using its ID.
@@ -286,7 +286,7 @@ def show_messages():
     return render_template("messages.html", messages=all_messages)
 
 
-@app.route("/delete-message/<int:message_id>")
+@app.route("/messages/<int:message_id>/delete")
 @admin_required
 def delete_message(message_id):
     # Get the message object from the database using its ID.
@@ -300,6 +300,53 @@ def delete_message(message_id):
         flash("Message deleted!", "success")
     # Redirect the user back to the page that displays all messages.
     return redirect(url_for("show_messages"))
+
+
+@app.route("/users")
+@admin_required
+def get_all_users():
+    # Retrieve all users from the database
+    all_users = db.session.execute(db.select(User)).scalars().all()
+    # Create a pre-populated form for each user
+    change_role_forms = [
+        ChangeRoleForm(user_id=user.id, role=user.role) for user in all_users
+    ]
+    # Create a list with (user, form) tuples
+    user_form_tuples = zip(all_users, change_role_forms)
+    # Render the page, passing the retrieved users with forms to it
+    return render_template("users.html", users=user_form_tuples)
+
+
+@app.route("/users/<int:user_id>/delete")
+@admin_required
+def delete_user(user_id):
+    # Get the user from the database using their ID.
+    user = db.session.get(User, user_id)
+    # Check if the user exists in the database.
+    if user:
+        # If it does, delete the user from the database.
+        db.session.delete(user)
+        db.session.commit()
+        # Display a success flash message
+        flash("User deleted!", "success")
+    # Redirect the user back to the page that displays all users.
+    return redirect(url_for("get_all_users"))
+
+
+@app.route("/users", methods=["POST"])
+@admin_required
+def change_user_role():
+    form = ChangeRoleForm()
+    # Get the user from the database using their ID.
+    user = db.session.get(User, form.user_id.data)
+    # Check if the user exists in the database and if form passed validation on submit
+    if user and form.validate_on_submit():
+        # Update user's role
+        user.role = form.role.data
+        # Commit changes in the database
+        db.session.commit()
+        flash("User role updated successfully.", "success")
+    return redirect(url_for("get_all_users"))
 
 
 @app.route("/register", methods=["GET", "POST"])

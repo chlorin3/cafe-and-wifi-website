@@ -17,6 +17,7 @@
             <a class="nav-link" href="{{ url_for('contact') }}">Contact Us</a>
             {% if current_user.role == "admin" %}
             <a class="nav-link" href="{{ url_for('show_messages') }}">Messages</a>
+            <a class="nav-link" href="{{ url_for('get_all_users') }}">Users</a>
             {% endif %}
             {% if current_user.is_authenticated %}
             <div class="nav-link text-secondary">{{ current_user.email.split("@")[0] }}</div>
